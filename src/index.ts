@@ -32,8 +32,10 @@ app
         messagem: "Verifique se a impressora está connectada."
       }
     }
-
   })
-  .listen(process.env.APPLICATION_PORT as string)
+  .listen({
+    hostname: "0.0.0.0",
+    port: process.env.APPLICATION_PORT as string
+  })
 
 console.log(`🦊 Server is running at ${app.server?.hostname}:${app.server?.port}`)
