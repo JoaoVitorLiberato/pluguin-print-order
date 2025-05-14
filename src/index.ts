@@ -5,7 +5,7 @@ app
   .get("/", async () => {
     try {
       const printerConnected  = await printer.isPrinterConnected()
-      if (!printerConnected) throw Error()
+      if (!printerConnected) throw new Error("Impressora desconectada")
 
       printer.println("-".repeat(48))
       printer.println(`Printer test`)
@@ -13,7 +13,7 @@ app
 
       return "Impressora conectada com sucesso!"
     } catch (error) {
-      console.error("Error get index.ts", error)
+      console.error(error instanceof Error ? error.message : error)
       return {
         codigo: "impressora-nao-conectada",
         messagem: "Verifique se a impressora está connectada."

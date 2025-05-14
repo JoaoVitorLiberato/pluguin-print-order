@@ -66,7 +66,8 @@ export async function middlewarePrintOrder (data: IOrderData): Promise<void|IMid
 
       await printer.execute()
     } catch (error) {
-      console.error("middlewarePrintOrder - Erro na impressão:", error)
+      console.error(error instanceof Error ? error.message : error)
+
       resolve({
         codigo: "erro-impressao",
         messagem: `Houve um erro ao tentar imprimir o pedido ${data.order.id}`
