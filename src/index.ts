@@ -7,9 +7,9 @@ app
       const printerConnected  = await printer.isPrinterConnected()
       if (!printerConnected) throw new Error("Impressora desconectada")
 
-      printer.println("-".repeat(48))
+      printer.println("-".repeat(Number(process.env.APPLICATION_PRINT_MAX_LENGTH_LINE)))
       printer.println(`Printer test`)
-      printer.println("-".repeat(48))
+      printer.println("-".repeat(Number(process.env.APPLICATION_PRINT_MAX_LENGTH_LINE)))
 
       return "Impressora conectada com sucesso!"
     } catch (error) {
@@ -23,4 +23,4 @@ app
   })
   .listen(process.env.APPLICATION_PORT as string)
 
-console.log(`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`)
+console.log(`🦊 Server is running at ${app.server?.hostname}:${app.server?.port}`)

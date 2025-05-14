@@ -1,15 +1,15 @@
 import printer from "../Pluguins/Printer.pluguin"
-import { processQueue, PRINT_QUEUE } from "./PrinterQueue.middleware"
-import { slugify } from "../Helpers/StringFormater.helper"
-import { wrapText } from "../Helpers/WrapText.helper"
+import { processQueue, PRINT_QUEUE } from "../Middlewares/PrinterQueue.middleware"
+import { slugify } from "./StringFormater.helper"
+import { wrapText } from "./WrapText.helper"
 import { IOrderData } from "../Types/Order.type"
 import { IMiddlewarePrinting } from "../Types/PrinterQueue.type"
 
-export async function middlewarePrintOrder (data: IOrderData): Promise<void|IMiddlewarePrinting> {
+export async function PrintOrder (data: IOrderData): Promise<void|IMiddlewarePrinting> {
   return new Promise((resolve) => {
     PRINT_QUEUE.push(async () => {
     try {
-      const MAX_LENGTH_LINE = 48
+      const MAX_LENGTH_LINE = Number(process.env.APPLICATION_PRINT_MAX_LENGTH_LINE)
       const { consumidor, order } = data
 
       printer.alignCenter()
@@ -43,11 +43,13 @@ export async function middlewarePrintOrder (data: IOrderData): Promise<void|IMid
           printer.println(`  ${itemName[i]}`)
         }
 
-        for (const optional of item.optionals) {
-          const optName = wrapText(optional.name, MAX_LENGTH_LINE - 10)
-          printer.println(`  + ${optName[0]}  R$ ${optional.price}`)
-          for (let i = 1; i < optName.length; i++) {
-            printer.println(`    ${optName[i]}`)
+        if (item.optionals) {
+          for (const optional of item.optionals) {
+            const optName = wrapText(optional.name, MAX_LENGTH_LINE - 10)
+            printer.println(`  + ${optName[0]}  R$ ${optional.price}`)
+            for (let i = 1; i < optName.length; i++) {
+              printer.println(`    ${optName[i]}`)
+            }
           }
         }
       }

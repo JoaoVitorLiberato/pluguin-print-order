@@ -10,7 +10,7 @@ export type IOrderData = {
       id: string;
       name: string;
       price: string;
-      optionals: [{
+      optionals?: [{
         id: string;
         name: string;
         price: string;
