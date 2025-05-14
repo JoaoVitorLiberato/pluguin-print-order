@@ -5,11 +5,13 @@ import { wrapText } from "./WrapText.helper"
 import { IOrderData } from "../Types/Order.type"
 import { IMiddlewarePrinting } from "../Types/PrinterQueue.type"
 
+// BEMAATCH 4200-TH 80mm - size:48
+
 export async function PrintOrder (data: IOrderData): Promise<void|IMiddlewarePrinting> {
   return new Promise((resolve) => {
     PRINT_QUEUE.push(async () => {
     try {
-      const MAX_LENGTH_LINE = Number(process.env.APPLICATION_PRINT_MAX_LENGTH_LINE)
+      const MAX_LENGTH_LINE = Number(process.env.APPLICATION_PRINT_LINE_SIZE)
       const { consumidor, order } = data
 
       printer.alignCenter()
