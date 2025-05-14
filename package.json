@@ -2,11 +2,13 @@
   "name": "api-printer-orders",
   "version": "1.0.50",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "bun build src/index.ts --compile --outfile=app.exe",
     "dev": "bun run --watch src/index.ts"
   },
   "dependencies": {
-    "elysia": "latest"
+    "dotenv": "^16.5.0",
+    "elysia": "latest",
+    "node-thermal-printer": "^4.4.5"
   },
   "devDependencies": {
     "bun-types": "latest"
