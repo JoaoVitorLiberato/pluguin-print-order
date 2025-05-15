@@ -4,8 +4,8 @@ export const PRINT_QUEUE: Array<IPrintWorker> = []
 let processingOrder = false
 
 
-export async function processQueue (): Promise<void> {
-  if (processingOrder || PRINT_QUEUE.length === 0) return
+export async function processQueue (): Promise<void|string|IPrintWorker> {
+  if (processingOrder || PRINT_QUEUE.length === 0) return "Vazio"
 
   processingOrder = true
 
@@ -16,10 +16,12 @@ export async function processQueue (): Promise<void> {
       await ORDER_PRINTING()
     } catch (err) {
       console.error("Error ao processar impressão")
+      return "error-queue-process"
+    } finally {
+      processingOrder = false
+      setTimeout(processQueue, 500)
     }
+  } else {
+    return "A fila está vazia."
   }
-
-  processingOrder = false
-
-  setTimeout(processQueue, 500)
 }

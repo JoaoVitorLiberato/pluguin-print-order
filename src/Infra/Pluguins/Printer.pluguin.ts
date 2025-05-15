@@ -2,8 +2,8 @@ import { ThermalPrinter, PrinterTypes, BreakLine, CharacterSet } from "node-ther
 
 const printer = new ThermalPrinter({
   type: PrinterTypes.EPSON,
-  interface: `${String(process.env.APPLICATION_PRINT_IP)}:${String(process.env.APPLICATION_PRINT_PORT)}`,
-  removeSpecialCharacters: false,
+  interface: String(process.env.APPLICATION_PRINT_INTERFACE),
+  removeSpecialCharacters: true,
   breakLine: BreakLine.WORD,
   characterSet: CharacterSet.PC860_PORTUGUESE,
   options: {

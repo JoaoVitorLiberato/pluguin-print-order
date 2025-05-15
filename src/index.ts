@@ -20,9 +20,15 @@ app
       const printerConnected  = await printer.isPrinterConnected()
       if (!printerConnected) throw new Error("Impressora desconectada")
 
+      // teste impressão
+      printer.setTextNormal()
       printer.println("-".repeat(Number(process.env.APPLICATION_PRINT_LINE_SIZE)))
-      printer.println(`Printer test`)
+      printer.println("")
+      printer.println("Print teste")
+      printer.println("")
       printer.println("-".repeat(Number(process.env.APPLICATION_PRINT_LINE_SIZE)))
+      // printer.execute()
+      // teste impressão
 
       return "Impressora conectada com sucesso!"
     } catch (error) {

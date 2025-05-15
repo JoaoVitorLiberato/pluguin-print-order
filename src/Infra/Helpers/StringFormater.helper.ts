@@ -8,3 +8,7 @@ export function slugify (str:string) {
     .replace(/^-+|-+$/g, "")
     .trim();
 }
+
+export function sanitizeText(text: string): string {
+  return text.replace(/[^\x00-\x7FÀ-ÿ0-9a-zA-Z \n\r.,;:?!@#$%&*()_+\-]/g, "")
+}
