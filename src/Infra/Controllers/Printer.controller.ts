@@ -8,12 +8,9 @@ export class PrinterController  {
 
       const responseHelper = await PrintOrder(body)
 
-      if (responseHelper && /^(erro-print)$/i.test(responseHelper.codigo)) {
+      if (responseHelper) {
+        if (/^(erro-print)$/i.test(responseHelper.codigo)) throw new Error()
         return responseHelper
-      }
-
-      return {
-        messagem: "O pedido foi para a fila de impressão"
       }
     } catch {
       return {
