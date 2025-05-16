@@ -11,8 +11,16 @@ export function PrintOrder (data: IOrderData): Promise<IMiddlewarePrinting> {
   return new Promise(async(resolve) => {
     PRINT_QUEUE.push(async () => {
       try {
+        const printerConnected  = await printer.isPrinterConnected()
+        if (!printerConnected) {
+          resolve({
+            codigo: "impressoranaoconectada",
+            messagem: "Verifique se a impressora está connectada a rede corretamente."
+          })
+        }
+
         const MAX_LENGTH_LINE = Number(process.env.APPLICATION_PRINT_LINE_SIZE)
-        const { consumidor, order } = data
+        const { consumidor, order, loja } = data
 
         printer.alignCenter()
         printer.setTextNormal()
@@ -25,6 +33,11 @@ export function PrintOrder (data: IOrderData): Promise<IMiddlewarePrinting> {
         printer.println("-".repeat(MAX_LENGTH_LINE))
         printer.println(`Pedido: ${order.id}`)
         printer.println("-".repeat(MAX_LENGTH_LINE))
+        printer.println("")
+
+        if (loja?.mesa) {
+          printer.println(`Mesa: ${loja.mesa}`)
+        }
 
         const nameLines = wrapText(slugify(consumidor.nome), MAX_LENGTH_LINE)
         nameLines.forEach((line, index) =>
@@ -73,14 +86,14 @@ export function PrintOrder (data: IOrderData): Promise<IMiddlewarePrinting> {
         await printer.execute()
 
         resolve({
-          codigo: "print-queue-success",
+          codigo: "pedidoimprimido",
           messagem: "Imprimiu com sucesso"
         })
       } catch (error) {
         console.error(error instanceof Error ? error.message : error)
 
         resolve({
-          codigo: "erro-print",
+          codigo: "erroimpressaodopedido",
           messagem: `Houve um erro ao tentar imprimir o pedido ${data.order.id}`
         })
       }

@@ -1,44 +1,54 @@
+import { t } from "elysia"
 import app from "./app"
 import printer from "./Infra/Pluguins/Printer.pluguin"
 
 app
-  .onBeforeHandle(({ request, set }) => {
-    const TOKEN = request.headers.get("x-api-key")
+  .get("/",
+    async ({ set }) => {
+      try {
+        const printerConnected  = await printer.isPrinterConnected()
+        if (!printerConnected) throw new Error("Impressora desconectada")
 
-    if (String(TOKEN) !== String(process.env.APPLICATION_API_KEY)) {
-      console.error("Usuário não autorizado")
+        // teste impressão
+        printer.setTextNormal()
+        printer.println("-".repeat(Number(process.env.APPLICATION_PRINT_LINE_SIZE)))
+        printer.println("")
+        printer.println("Print Teste")
+        printer.println("")
+        printer.println("-".repeat(Number(process.env.APPLICATION_PRINT_LINE_SIZE)))
+        printer.execute()
+        // teste impressão
 
-      set.status = 401
-      return {
-        codigo: "unauthorized",
-        mensagem: "Usuário não autorizado"
+        return {
+          codigo: "impressoraconectada",
+          messagem: "Impressora conectada com sucesso!"
+        }
+      } catch (error) {
+        console.error(error instanceof Error ? error.message : error)
+        set.status = 400
+
+        return {
+          codigo: "impressoranaoconectada",
+          messagem: "Verifique se a impressora está connectada a rede corretamente."
+        }
       }
+    },
+    {
+      response: {
+        200: t.Object({
+          codigo: t.String({ description: "impressoraconectada" }),
+          messagem: t.String()
+        }),
+        400: t.Object({
+          codigo: t.String({ description: "impressoranaoconectada" }),
+          messagem: t.String()
+        }),
+      },
+      headers: t.Object({
+        "x-api-key": t.String({ description: "Adicionar a chave key" })
+      })
     }
-  })
-  .get("/", async () => {
-    try {
-      const printerConnected  = await printer.isPrinterConnected()
-      if (!printerConnected) throw new Error("Impressora desconectada")
-
-      // teste impressão
-      printer.setTextNormal()
-      printer.println("-".repeat(Number(process.env.APPLICATION_PRINT_LINE_SIZE)))
-      printer.println("")
-      printer.println("Print teste")
-      printer.println("")
-      printer.println("-".repeat(Number(process.env.APPLICATION_PRINT_LINE_SIZE)))
-      // printer.execute()
-      // teste impressão
-
-      return "Impressora conectada com sucesso!"
-    } catch (error) {
-      console.error(error instanceof Error ? error.message : error)
-      return {
-        codigo: "impressora-nao-conectada",
-        messagem: "Verifique se a impressora está connectada."
-      }
-    }
-  })
+  )
   .listen({
     hostname: "0.0.0.0",
     port: process.env.APPLICATION_PORT as string

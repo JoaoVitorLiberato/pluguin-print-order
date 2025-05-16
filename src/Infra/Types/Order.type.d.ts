@@ -18,4 +18,7 @@ export type IOrderData = {
     }];
     observation: string;
   };
+  loja?: {
+    mesa: string;
+  };
 }
