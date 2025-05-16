@@ -1,6 +1,7 @@
 import { t } from "elysia"
 import app from "./app"
 import printer from "./Infra/Pluguins/Printer.pluguin"
+import { showWindowsAlert } from "./Infra/Helpers/WindowAlert.helper"
 
 app
   .get("/",
@@ -27,6 +28,7 @@ app
         console.error(error instanceof Error ? error.message : error)
         set.status = 400
 
+        showWindowsAlert("Erro na impressora", "Verifique se a impressora está connectada a rede corretamente")
         return {
           codigo: "impressoranaoconectada",
           messagem: "Verifique se a impressora está connectada a rede corretamente."

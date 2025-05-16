@@ -1,6 +1,7 @@
 import { Context } from "elysia"
-import { PrintOrder } from "../Helpers/FormatPrinter.helper";
-import { IOrderData } from "../Types/Order.type";
+import { PrintOrder } from "../Helpers/FormatPrinter.helper"
+import { showWindowsAlert } from "../Helpers/WindowAlert.helper"
+import { IOrderData } from "../Types/Order.type"
 
 export class PrinterController  {
   async printer ({ set, body }: Context) {
@@ -14,7 +15,8 @@ export class PrinterController  {
 
       if (/^(impressoranaoconectada)$/i.test(responseHelper.codigo)) {
         set.status = 400
-        console.error(`Ao tentar imprimir o pedido ${PAYLOAD.order.id}, a impressora estava desconectada.`)
+        showWindowsAlert("Impressora desconectada", `A impressora está desconectada e não foi possível imprimir o pedido ${PAYLOAD.order.id}, a impressora estava desconectada.`)
+        console.error(`A impressora está desconectada e não foi possível imprimir o pedido ${PAYLOAD.order.id}, a impressora estava desconectada.`)
         return responseHelper
       }
 
@@ -23,6 +25,7 @@ export class PrinterController  {
     } catch {
       set.status = 400
       console.error(`Houve um erro ao tentar imprimir seu pedido ${PAYLOAD.order.id}`)
+      showWindowsAlert("Erro ao imprimir", `Houve um erro ao tentar imprimir seu pedido ${PAYLOAD.order.id}`)
       return {
         pedido: PAYLOAD.order.id,
         codigo: "erroimprimirpedido",
