@@ -4,4 +4,4 @@ To start the development server run:
 bun run dev
 ```
 
-Open http://${ip}:3000/ with your browser to see the result.
+Open http://${your_ip}:3000/ with your browser to see the result.
