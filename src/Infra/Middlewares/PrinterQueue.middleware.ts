@@ -19,7 +19,7 @@ export async function processQueue (): Promise<void|string|IPrintWorker> {
       return "error-queue-process"
     } finally {
       processingOrder = false
-      setTimeout(processQueue, 500)
+      setTimeout(processQueue, 1200)
     }
   } else {
     return "A fila está vazia."

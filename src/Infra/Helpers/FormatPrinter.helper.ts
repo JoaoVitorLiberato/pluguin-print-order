@@ -14,6 +14,7 @@ export function PrintOrder (data: IOrderData): Promise<IMiddlewarePrinting> {
         const printerConnected  = await printer.isPrinterConnected()
         if (!printerConnected) {
           resolve({
+            pedido: data.order.id,
             codigo: "impressoranaoconectada",
             messagem: "Verifique se a impressora está connectada a rede corretamente."
           })

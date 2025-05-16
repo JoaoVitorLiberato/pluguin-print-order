@@ -14,7 +14,7 @@ export class PrinterController  {
 
       if (/^(impressoranaoconectada)$/i.test(responseHelper.codigo)) {
         set.status = 400
-        console.error("Verifique se a impressora está conectada!")
+        console.error(`Ao tentar imprimir o pedido ${PAYLOAD.order.id}, a impressora estava desconectada.`)
         return responseHelper
       }
 
