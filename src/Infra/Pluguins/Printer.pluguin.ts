@@ -1,5 +1,5 @@
 import { ThermalPrinter, PrinterTypes, BreakLine, CharacterSet } from "node-thermal-printer"
-import { printerIP } from "../Middlewares/FoundFileIPPrinter.middleware"
+import { printerIP } from "../../../ip.config"
 
 export default (async () => {
   const IP = await printerIP()
