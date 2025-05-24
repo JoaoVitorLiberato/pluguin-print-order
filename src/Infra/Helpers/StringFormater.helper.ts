@@ -6,7 +6,7 @@ export function slugify (str:string) {
     .replace(/[^\w\s-]/g, "")
     .replace(/[\s_-]+/g, "-")
     .replace(/^-+|-+$/g, "")
-    .trim();
+    .trim();
 }
 
 export function sanitizeText(text: string): string {

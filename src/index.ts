@@ -1,22 +1,26 @@
 import { t } from "elysia"
 import app from "./app"
-import printer from "./Infra/Pluguins/Printer.pluguin"
 import { showWindowsAlert } from "./Infra/Helpers/WindowAlert.helper"
 
 app
   .get("/",
     async ({ set }) => {
       try {
+        const printer = await import("./Infra/Pluguins/Printer.pluguin").then(p => p.default);
+
         const printerConnected  = await printer.isPrinterConnected()
         if (!printerConnected) throw new Error("Impressora desconectada")
 
         // teste impressão
         printer.setTextNormal()
+        printer.alignCenter()
         printer.println("-".repeat(Number(process.env.APPLICATION_PRINT_LINE_SIZE)))
         printer.println("")
         printer.println("Print Teste")
+        printer.println("ÁÉÍÓÚ Ç ÃÕ À Â Ê Ô")
         printer.println("")
         printer.println("-".repeat(Number(process.env.APPLICATION_PRINT_LINE_SIZE)))
+        printer.cut()
         printer.execute()
         // teste impressão
 
