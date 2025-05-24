@@ -1,28 +1,31 @@
 import { t } from "elysia"
 import app from "./app"
 import { pauseMessagesWindow, showWindowsAlert } from "./Infra/Helpers/WindowAlert.helper"
+import { configPrinter } from "./Infra/Pluguins/Printer.pluguin"
+import { printerIP } from "../ip.config"
 
 app
   .get("/",
     async ({ set }) => {
       try {
-        const printer = await import("./Infra/Pluguins/Printer.pluguin").then(p => p.default);
+        const IPs = printerIP()
+        for (const ip of await IPs) {
+          const printer = configPrinter(ip)
+          const printerConnected  = await printer.isPrinterConnected()
+          if (!printerConnected) throw new Error("Impressora desconectada")
 
-        const printerConnected  = await printer.isPrinterConnected()
-        if (!printerConnected) throw new Error("Impressora desconectada")
+          printer.setTextNormal()
+          printer.alignCenter()
+          printer.println("-".repeat(Number(process.env.APPLICATION_PRINT_LINE_SIZE)))
+          printer.println("")
+          printer.println("Print Teste")
+          printer.println("ÁÉÍÓÚ Ç ÃÕ À Â Ê Ô")
+          printer.println("")
+          printer.println("-".repeat(Number(process.env.APPLICATION_PRINT_LINE_SIZE)))
 
-        // teste impressão
-        printer.setTextNormal()
-        printer.alignCenter()
-        printer.println("-".repeat(Number(process.env.APPLICATION_PRINT_LINE_SIZE)))
-        printer.println("")
-        printer.println("Print Teste")
-        printer.println("ÁÉÍÓÚ Ç ÃÕ À Â Ê Ô")
-        printer.println("")
-        printer.println("-".repeat(Number(process.env.APPLICATION_PRINT_LINE_SIZE)))
-        printer.cut()
-        printer.execute()
-        // teste impressão
+          printer.cut()
+          await printer.execute()
+        }
 
         return {
           codigo: "impressoraconectada",
