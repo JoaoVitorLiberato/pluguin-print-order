@@ -1,6 +1,6 @@
 import { t } from "elysia"
 import app from "./app"
-import { showWindowsAlert } from "./Infra/Helpers/WindowAlert.helper"
+import { pauseMessagesWindow, showWindowsAlert } from "./Infra/Helpers/WindowAlert.helper"
 
 app
   .get("/",
@@ -61,3 +61,4 @@ app
   })
 
 console.log(`🦊 Server is running at ${app.server?.hostname}:${app.server?.port}`)
+pauseMessagesWindow()

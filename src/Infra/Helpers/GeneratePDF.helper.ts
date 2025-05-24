@@ -8,8 +8,13 @@ export function generatePrinterPDF(conteudo: string[], fileName:string) {
     margin: 50
   })
 
-  const filePath = path.join(process.cwd(), "arquivos", fileName)
-  const stream = fs.createWriteStream(filePath)
+  const dirPath = path.join(process.cwd(), "arquivos")
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
+  }
+
+  const filePath = path.join(dirPath, fileName);
+  const stream = fs.createWriteStream(filePath);
   doc.pipe(stream)
 
   doc.fontSize(12)
