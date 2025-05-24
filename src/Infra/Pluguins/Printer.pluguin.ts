@@ -1,14 +1,19 @@
 import { ThermalPrinter, PrinterTypes, BreakLine, CharacterSet } from "node-thermal-printer"
+import { printerIP } from "../../../ip.config"
 
-const printer = new ThermalPrinter({
-  type: PrinterTypes.EPSON,
-  interface: String(process.env.APPLICATION_PRINT_INTERFACE),
-  removeSpecialCharacters: true,
-  breakLine: BreakLine.WORD,
-  characterSet: CharacterSet.PC860_PORTUGUESE,
-  options: {
-    timeout: 30000,
-  }
-})
+export default (async () => {
+  const IP = await printerIP()
 
-export default printer
+  const printer = new ThermalPrinter({
+    type: PrinterTypes.EPSON,
+    interface: String(IP),
+    removeSpecialCharacters: true,
+    breakLine: BreakLine.WORD,
+    characterSet: CharacterSet.PC437_USA,
+    options: {
+      timeout: 30000,
+    }
+  })
+
+  return printer
+})()

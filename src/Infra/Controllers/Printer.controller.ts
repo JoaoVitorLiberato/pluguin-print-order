@@ -1,5 +1,5 @@
 import { Context } from "elysia"
-import { PrintOrder } from "../Helpers/FormatPrinter.helper"
+import { PrintOrder } from "../Middlewares/FormatPrinter.middleware"
 import { showWindowsAlert } from "../Helpers/WindowAlert.helper"
 import { IOrderData } from "../Types/Order.type"
 
