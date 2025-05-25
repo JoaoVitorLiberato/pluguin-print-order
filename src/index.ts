@@ -8,8 +8,8 @@ app
   .get("/",
     async ({ set }) => {
       try {
-        const IPs = printerIP()
-        for (const ip of await IPs) {
+        const IPs = await printerIP()
+        for (const ip of IPs) {
           const printer = configPrinter(ip)
           const printerConnected  = await printer.isPrinterConnected()
           if (!printerConnected) throw new Error("Impressora desconectada")
